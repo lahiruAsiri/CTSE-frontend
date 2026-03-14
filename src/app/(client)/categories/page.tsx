@@ -46,18 +46,18 @@ export default function CategoriesPage() {
           <Link 
             key={cat.id} 
             href={`/products?category=${cat.id}`}
-            className="group bg-white rounded-3xl p-8 border border-gray-100 shadow-sm hover:shadow-xl hover:border-indigo-100 transition-all duration-300 flex flex-col items-center text-center relative overflow-hidden"
+            className="group bg-white rounded-3xl p-10 border border-gray-100 shadow-sm hover:shadow-2xl hover:-translate-y-2 hover:border-indigo-500/30 transition-all duration-500 flex flex-col items-center text-center relative overflow-hidden"
           >
-            <div className="absolute top-0 right-0 p-4 opacity-0 group-hover:opacity-100 transition-opacity">
-              <ArrowRight className="w-5 h-5 text-indigo-500" />
+            <div className="absolute top-0 right-0 p-6 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+              <ArrowRight className="w-6 h-6 text-indigo-500 transform group-hover:translate-x-1 transition-transform" />
             </div>
             
-            <div className="w-16 h-16 bg-indigo-50 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
-              <Tag className="w-8 h-8 text-indigo-600" />
+            <div className="w-24 h-24 bg-gradient-to-br from-indigo-50 to-purple-50 rounded-full flex items-center justify-center mb-8 group-hover:scale-110 group-hover:shadow-inner transition-all duration-500">
+              <Tag className="w-10 h-10 text-indigo-600" />
             </div>
             
-            <h2 className="text-2xl font-bold text-gray-900 mb-3">{cat.name}</h2>
-            <p className="text-gray-500 line-clamp-2">{cat.description || 'Quality electronics and accessories.'}</p>
+            <h2 className="text-2xl font-extrabold text-gray-900 mb-3 group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-indigo-600 group-hover:to-purple-600 transition-colors">{cat.name}</h2>
+            <p className="text-gray-500 line-clamp-2 leading-relaxed">{cat.description || 'Premium electronics and next-generation accessories.'}</p>
           </Link>
         ))}
       </div>
