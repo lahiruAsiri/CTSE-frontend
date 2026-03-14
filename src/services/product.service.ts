@@ -9,6 +9,7 @@ export interface Product {
   categoryId: number;
   imageUrl?: string;
   category?: Category;
+  isTrending?: boolean;
 }
 
 export interface Category {
