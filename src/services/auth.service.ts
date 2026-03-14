@@ -25,4 +25,9 @@ export const authService = {
     const name = user.profile?.name || user.name || 'User';
     return { ...user, role: roleStr, name };
   },
+
+  getRecommendations: async () => {
+    const res = await apiClient.get('/api/admin-users/profile/recommendations');
+    return res.data;
+  },
 };
