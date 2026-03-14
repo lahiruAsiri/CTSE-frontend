@@ -3,26 +3,31 @@
 import { useEffect, useState } from 'react';
 import { useAuthStore } from '@/store/useAuthStore';
 import { orderService } from '@/services/order.service';
+import { authService } from '@/services/auth.service';
 import { notificationService, Notification } from '@/services/notification.service';
 import ProtectedRoute from '@/components/ProtectedRoute';
-import { Package, Bell, Loader2, CheckCircle2 } from 'lucide-react';
+import { Package, Bell, Loader2, CheckCircle2, ShoppingBag } from 'lucide-react';
 import toast from 'react-hot-toast';
+import Link from 'next/link';
 
 export default function ProfilePage() {
   const { user } = useAuthStore();
   const [orders, setOrders] = useState<any[]>([]);
   const [notifications, setNotifications] = useState<Notification[]>([]);
+  const [recommendations, setRecommendations] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchDashboardData = async () => {
       try {
-        const [ordersData, notifsData] = await Promise.all([
+        const [ordersData, notifsData, recsData] = await Promise.all([
           orderService.getOrderHistory(),
           notificationService.getMyInbox(),
+          authService.getRecommendations()
         ]);
         setOrders(ordersData);
         setNotifications(notifsData);
+        setRecommendations(recsData);
       } catch (err) {
         toast.error('Failed to load dashboard data');
       } finally {
@@ -42,7 +47,12 @@ export default function ProfilePage() {
   };
 
   if (loading) {
-    return <div className="flex justify-center py-20"><Loader2 className="w-8 h-8 animate-spin text-indigo-600" /></div>;
+    return (
+      <div className="flex flex-col items-center justify-center py-40 gap-4">
+        <Loader2 className="w-10 h-10 animate-spin text-indigo-600" />
+        <p className="text-gray-500 font-medium animate-pulse">Synchronizing your dashboard...</p>
+      </div>
+    );
   }
 
   return (
@@ -65,7 +75,32 @@ export default function ProfilePage() {
           </div>
         </div>
 
+        <div className="mb-12">
+          <div className="flex items-center gap-3 mb-6">
+            <ShoppingBag className="w-6 h-6 text-indigo-600" />
+            <h2 className="text-2xl font-black text-gray-900">Recommended for You</h2>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+            {recommendations.map((product) => (
+              <Link href={`/products`} key={product.id}>
+                <div className="bg-white rounded-3xl p-4 shadow-sm border border-gray-100 hover:shadow-xl hover:-translate-y-2 transition-all duration-300 group">
+                  <div className="relative aspect-square rounded-2xl overflow-hidden bg-gray-50 mb-4">
+                    <img 
+                      src={product.imageUrl || '/product-placeholder.png'} 
+                      alt={product.name}
+                      className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                    />
+                  </div>
+                  <h3 className="font-bold text-gray-900 group-hover:text-indigo-600 transition-colors">{product.name}</h3>
+                  <p className="text-indigo-600 font-black mt-1">${product.price}</p>
+                </div>
+              </Link>
+            ))}
+          </div>
+        </div>
+
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        {/* ... */}
           {/* Order History */}
           <div className="bg-white rounded-3xl p-8 shadow-sm border border-gray-100">
             <div className="flex items-center gap-3 mb-6">
@@ -77,7 +112,7 @@ export default function ProfilePage() {
               <p className="text-gray-500 italic">No orders found.</p>
             ) : (
               <div className="space-y-4">
-                {orders.map((order) => (
+                {orders.map((order: any) => (
                   <div key={order.id} className="p-5 border border-gray-100 rounded-3xl flex justify-between items-center group hover:shadow-lg hover:-translate-y-1 hover:border-indigo-100 transition-all duration-300 bg-white">
                     <div className="flex items-center gap-4">
                       <div className="w-12 h-12 bg-gray-50 rounded-2xl flex items-center justify-center group-hover:bg-indigo-50 transition-colors">
