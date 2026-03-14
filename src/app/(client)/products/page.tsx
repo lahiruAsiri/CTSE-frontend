@@ -135,6 +135,11 @@ function ProductsContent() {
                   Out of Stock
                 </span>
               )}
+              {product.isTrending && (
+                <span className="bg-gradient-to-r from-orange-500 to-red-600 text-white text-[10px] font-black px-3 py-1.5 rounded-full shadow-lg flex items-center gap-1 animate-bounce">
+                  🔥 TRENDING
+                </span>
+              )}
             </div>
 
             {/* Floating White Box at Bottom */}
