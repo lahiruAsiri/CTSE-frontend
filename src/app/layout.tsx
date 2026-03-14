@@ -7,7 +7,7 @@ import { Toaster } from 'react-hot-toast';
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
-  title: 'CTSE Electronics',
+  title: 'NovaTech',
   description: 'Premium electronics store with microservices backend',
 };
 

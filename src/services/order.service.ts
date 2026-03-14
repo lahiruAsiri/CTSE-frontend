@@ -22,6 +22,11 @@ export const orderService = {
     return res.data;
   },
 
+  updateQuantity: async (cartItemId: number, quantity: number) => {
+    const res = await apiClient.patch(`/api/order-cart/${cartItemId}/quantity`, { quantity });
+    return res.data;
+  },
+
   checkout: async () => {
     const res = await apiClient.post('/api/order-orders/checkout');
     return res.data;

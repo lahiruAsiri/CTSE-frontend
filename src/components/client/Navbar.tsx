@@ -1,11 +1,20 @@
 'use client';
 
+import { useEffect } from 'react';
 import Link from 'next/link';
 import { useAuthStore } from '@/store/useAuthStore';
+import { useCartStore } from '@/store/useCartStore';
 import { ShoppingCart, User, LogOut, Package } from 'lucide-react';
 
 export default function Navbar() {
   const { user, isAuthenticated, logout } = useAuthStore();
+  const { totalCount, fetchCart } = useCartStore();
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      fetchCart();
+    }
+  }, [isAuthenticated, fetchCart]);
 
   return (
     <nav className="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-gray-100 shadow-sm">
@@ -17,21 +26,25 @@ export default function Navbar() {
               <Package className="h-5 w-5" />
             </div>
             <Link href="/" className="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-indigo-600 to-purple-600">
-              CTSE Electronics
+              NovaTech
             </Link>
           </div>
 
           <div className="hidden md:flex space-x-8">
             <Link href="/products" className="text-gray-600 hover:text-indigo-600 font-medium transition-colors">Products</Link>
             <Link href="/categories" className="text-gray-600 hover:text-indigo-600 font-medium transition-colors">Categories</Link>
+            <Link href="/about" className="text-gray-600 hover:text-indigo-600 font-medium transition-colors">About</Link>
+            <Link href="/contact" className="text-gray-600 hover:text-indigo-600 font-medium transition-colors">Contact</Link>
           </div>
 
           <div className="flex items-center space-x-6">
             <Link href="/cart" className="relative text-gray-600 hover:text-indigo-600 transition-colors">
               <ShoppingCart className="h-6 w-6" />
-              <span className="absolute -top-2 -right-2 inline-flex items-center justify-center h-5 w-5 rounded-full bg-red-500 text-white text-[10px] font-bold">
-                0
-              </span>
+              {totalCount > 0 && (
+                <span className="absolute -top-2 -right-2 inline-flex items-center justify-center h-5 w-5 rounded-full bg-red-500 text-white text-[10px] font-bold animate-in zoom-in duration-300">
+                  {totalCount}
+                </span>
+              )}
             </Link>
 
             {isAuthenticated ? (
